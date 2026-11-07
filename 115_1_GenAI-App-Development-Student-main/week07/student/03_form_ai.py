@@ -159,4 +159,5 @@ if st.session_state.event_record is not None:
     st.json(record["data"])
     # TODO C：以st.write顯示活動名稱與負責人；owner為None時顯示「尚未指定」。
     # st.info提供一般提示；這裡提醒學生完成結果顯示練習。
-    st.info("欄位顯示尚未完成，請完成TODO C。")
+    st.write("活動名稱：", record["data"]["title"])
+    st.write("負責人：", record["data"]["owner"] if record["data"]["owner"] is not None else "尚未指定")
