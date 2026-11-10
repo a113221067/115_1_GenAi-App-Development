@@ -30,22 +30,32 @@ st.set_page_config(page_title="期中個人專題", layout="centered")
 # ---------- 1. 自行完成專題定位與輸出設計 ----------
 # A／B／C是個人設計位置；可以自訂情境，不是填入教師範例的固定答案。
 # TODO A：自行選題，填入名稱與任務規則；不是把教師摘要器換名稱。
-APP_TITLE = ""
-INSTRUCTIONS = ""  # 說清楚角色、任務、只能依原文、資訊不足怎麼處理。
+APP_TITLE = "AI 商品評論分析系統"  # 說明專題名稱，會顯示在畫面標題與瀏覽器頁籤。
+INSTRUCTIONS = "您是商品評論分析師，請根據提供的評論內容，分析其正面與負面情緒，並提取關鍵詞。"  # 說清楚角色、任務、只能依原文、資訊不足怎麼處理。
 
 # TODO B：依自己的題目，在ProjectResult內定義至少兩個有用途的欄位。
 # 欄位用「名稱: str」或「名稱: list[str]」；不要加預設值，表示每欄必填。
 # 可用Field(description="欄位用途")說明規格；不要直接複製教師的三個欄位。
+
 class ProjectResult(BaseModel):
-    # extra="forbid"拒絕多餘欄位；strict=True不自動轉換錯誤型別。
-    # 這裡的strict是本機驗證設定；API的strict Schema由SDK產生。
     model_config = ConfigDict(extra="forbid", strict=True)
 
-    pass  # 請在這裡加入自己的欄位；尚未完成時會在請求前停止。
+    sentiment: str = Field(description="評論情緒：正面、負面或中立")
+    advantages: list[str] = Field(description="評論中提到的商品優點")
+    disadvantages: list[str] = Field(description="評論中提到的商品缺點")
+    suggestions: list[str] = Field(description="根據評論問題提出的改善建議")
+
 
 
 # TODO C：為自己的模型欄位設定標籤；可依情境修改表單與顯示方式。
-FIELD_LABELS = {}
+
+FIELD_LABELS = {
+    "sentiment": "評論情緒",
+    "advantages": "商品優點",
+    "disadvantages": "商品缺點",
+    "suggestions": "改善建議"
+}
+
 
 
 # ---------- 2. 完整提供的兩個短函式 ----------
