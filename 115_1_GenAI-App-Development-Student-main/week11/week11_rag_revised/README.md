@@ -90,3 +90,61 @@ python -X utf8 scripts/verify_week11_revised.py
 重建會讀取第10週修訂版的資料、問題與三個函式，產生雙版Notebook／Markdown、雙版App、範例資料與設定範本；不覆蓋本README與教師導讀，也不呼叫API。已測與未測範圍見[教師導讀](../第11週_課堂簡化版修訂版_教師導讀與修訂紀錄.md)。
 
 OpenAI代管的File Search只在Notebook第12節做概念比較，本App不包含。官方說明：[Retrieval](https://developers.openai.com/api/docs/guides/retrieval)、[Responses](https://developers.openai.com/api/docs/guides/text)、[File Search](https://developers.openai.com/api/docs/guides/tools-file-search)。
+
+## 第11週回家作業紀錄
+
+### 一、執行環境
+
+- 執行模式：離線預覽
+- Python：3.14.2
+- OpenAI：3.46.0
+- python-dotenv：1.2.4
+- Streamlit：1.67.0
+- API 實際請求次數：0次
+
+### 二、文件來源
+
+自行撰寫的虛構文件「校園 AI 工作坊」，共5段，無個人或敏感資料。
+
+### 三、三類問題測試
+
+| 類型 | 問題 | 取回證據 | 人工判讀 |
+|---|---|---|---|
+| 正常 | 活動地點在哪裡？ | chunk 0（1.000） | 資訊大樓301教室 |
+| 資訊不足 | 活動報名費用是多少？ | chunk 4（1.000）、chunk 1（0.500） | 費用尚未公布，不可猜測金額 |
+| 文件外 | 火星的平均氣溫是多少？ | 無 | 原文未提供相關資訊 |
+
+以上皆為離線預覽，真實模型回答未測。
+
+### 四、下載紀錄回查
+
+- rag_record (3).json：context 1段，回查通過。
+- rag_record (4).json：context 2段，回查通過。
+- rag_record (5).json：context 0段，回查通過。
+
+### 五、人工核對
+
+核對 chunk 0 的活動日期為2026年12月5日，地點為資訊大樓301教室，皆與原始文件相符。
+
+context 的來源標籤與取回證據相符。真實模型回答及其引用未測。
+
+### 六、錯誤與邊界修正
+
+- 問題：這場工作坊是在哪個教室舉行？
+- 預期：取回 chunk 0。
+- 實際：沒有找到證據。
+- 原因：離線關鍵字規則無法辨識此改寫問題。
+- 修正：將問題改為「活動地點在哪裡？」
+- 重測：成功取回 chunk 0，分數為1.000。
+
+### 七、自行建置 RAG 的限制
+
+離線關鍵字規則無法有效辨識所有改寫問題。相似度高不代表文件一定有答案。檢索結果會受到關鍵字與門檻設定影響。因此仍需要人工核對原文與來源。
+
+### 八、未測項目
+
+- 真實 Embedding 模型。
+- 真實模型回答與引用核對。
+- 第9～11週整合 RAG App。
+
+本次使用離線模式，未呼叫任何 API。
